@@ -6,17 +6,19 @@ import { User } from '../../providers/user';
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+
 
 @Component({
   selector: 'page-signup',
   templateUrl: 'signup.html'
 })
 export class SignupPage {
+  users: FirebaseListObservable<any[]>;
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
-  account: { name: string, email: string, password: string } = {
-    name: 'Test Human',
+  account: { email: string, password: string } = {
     email: 'test@example.com',
     password: 'test'
   };
@@ -27,8 +29,9 @@ export class SignupPage {
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
-    public translateService: TranslateService) {
-
+    public translateService: TranslateService,
+    db: AngularFireDatabase) {
+    this.users = db.list("/Users");
     /* DISABLING ERROR MESSAGING
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
@@ -38,6 +41,39 @@ export class SignupPage {
 
   doSignup() {
     // Attempt to login in through our User service
+    var email = this.account.email;
+    var pass = this.account.password;
+    var userAlreadyExists = false;
+
+    this.users.subscribe(users => {
+      for(var i = 0; i < users.length; i++) {
+        if(users[i].email === email) {
+          userAlreadyExists = true;
+          break;
+        }
+      }
+
+      if(!userAlreadyExists) {
+        this.users.push({email: email, password: pass});
+
+        let toast = this.toastCtrl.create({
+          message: "Successfully created user!",
+          duration: 3000,
+          position: 'top'
+        });
+        toast.present();
+        this.navCtrl.push(MainPage);
+      } else {
+        let toast = this.toastCtrl.create({
+          message: "Email is already in use! Try with a diffent address.",
+          duration: 3000,
+          position: 'top'
+        });
+        toast.present();
+      }
+    })
+
+    /*
     this.user.signup(this.account).subscribe((resp) => {
       this.navCtrl.push(MainPage);
     }, (err) => {
@@ -52,5 +88,8 @@ export class SignupPage {
       });
       toast.present();
     });
+    */
+
+
   }
 }
