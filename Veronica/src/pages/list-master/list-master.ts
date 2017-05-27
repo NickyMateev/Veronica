@@ -7,6 +7,7 @@ import { ItemDetailPage } from '../item-detail/item-detail';
 import { Items } from '../../providers/providers';
 
 import { Item } from '../../models/item';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Component({
   selector: 'page-list-master',
@@ -14,9 +15,11 @@ import { Item } from '../../models/item';
 })
 export class ListMasterPage {
   currentItems: Item[];
+  organizations: FirebaseListObservable<any[]>;
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController, db: AngularFireDatabase) {
     this.currentItems = this.items.query();
+    this.organizations = db.list("/Organizations");
   }
 
   /**

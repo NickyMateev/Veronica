@@ -34,6 +34,19 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+
+
+export const firebaseConfig = {
+    apiKey: "AIzaSyB1BwH5mbiTRWDX_XeohwkL9o3lfiff6mE",
+    authDomain: "veronica-9ca3b.firebaseapp.com",
+    databaseURL: "https://veronica-9ca3b.firebaseio.com",
+    projectId: "veronica-9ca3b",
+    storageBucket: "veronica-9ca3b.appspot.com",
+    messagingSenderId: "432362629415"
+};
+
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function HttpLoaderFactory(http: Http) {
@@ -116,7 +129,9 @@ export function providers() {
       }
     }),
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: entryComponents(),
