@@ -3,6 +3,7 @@ import { NavController, ModalController } from 'ionic-angular';
 
 import { ItemCreatePage } from '../item-create/item-create';
 import { ItemDetailPage } from '../item-detail/item-detail';
+import { SearchPage } from '../search/search';
 
 import { Items } from '../../providers/providers';
 
@@ -56,5 +57,10 @@ export class ListMasterPage {
     this.navCtrl.push(ItemDetailPage, {
       organization: organization
     });
+  }
+
+  searchForOrganizations() {
+    this.navCtrl.push(SearchPage);
+
   }
 }

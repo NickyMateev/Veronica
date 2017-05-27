@@ -6,6 +6,7 @@ import { ItemDetailPage } from '../item-detail/item-detail';
 import { Item } from '../../models/item';
 
 import { Items } from '../../providers/providers';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 
 @Component({
@@ -15,9 +16,11 @@ import { Items } from '../../providers/providers';
 export class SearchPage {
   
   currentItems: any = [];
+  organizations: FirebaseListObservable<any[]>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public items: Items) { }
-
+  constructor(public navCtrl: NavController, public navParams: NavParams, public items: Items, db: AngularFireDatabase) {
+      this.organizations = db.list("/Organizations");
+  }
   /**
    * Perform a service for the proper items.
    */
