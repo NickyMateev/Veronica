@@ -7,12 +7,15 @@ import { User } from '../../providers/user';
 
 import { TranslateService } from '@ngx-translate/core';
 
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+
 
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
 })
 export class LoginPage {
+  users: FirebaseListObservable<any[]>;
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
@@ -22,20 +25,47 @@ export class LoginPage {
   };
 
   // Our translated text strings
-  private loginErrorString: string;
+  //private loginErrorString: string;
 
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
-    public translateService: TranslateService) {
+    public translateService: TranslateService,
+    db: AngularFireDatabase) {
 
+    this.users = db.list("/Users");
+
+    /* DISABLING ERROR MESSAGING
     this.translateService.get('LOGIN_ERROR').subscribe((value) => {
       this.loginErrorString = value;
     })
+    */
   }
 
   // Attempt to login in through our User service
   doLogin() {
+    var email = this.account.email;
+    var pass = this.account.password;
+    var areCredentialsCorrect = false;
+
+    this.users.subscribe(users => {
+      for(var i = 0; i < users.length; i++) {
+          if(users[i].email === email && users[i].password === pass) {
+            areCredentialsCorrect = true;
+            this.navCtrl.push(MainPage);
+          }
+      }
+    });
+
+    if(!areCredentialsCorrect) {
+      let toast = this.toastCtrl.create({
+        message: "Invalid credentials! Try again.",
+        duration: 3000,
+        position: 'top'
+      });
+      toast.present();
+    }
+    /*
     this.user.login(this.account).subscribe((resp) => {
       this.navCtrl.push(MainPage);
     }, (err) => {
@@ -48,5 +78,6 @@ export class LoginPage {
       });
       toast.present();
     });
+    */
   }
 }
