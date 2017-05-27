@@ -52,9 +52,9 @@ export class ListMasterPage {
   /**
    * Navigate to the detail page for this item.
    */
-  openItem(item: Item) {
+  openOrgDesc(organization) {
     this.navCtrl.push(ItemDetailPage, {
-      item: item
+      organization: organization
     });
   }
 }
