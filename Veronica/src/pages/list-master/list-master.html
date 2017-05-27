@@ -8,48 +8,22 @@
 
 <ion-content>
 <ion-list>
-  <ion-item *ngFor="let organization of organizations | async" (click)="openOrgDesc(organization)">
+  <ion-item *ngFor="let organization of organizations | async">
     <ion-thumbnail item-left>
       <img src={{organization.avatarUrl}}>
     </ion-thumbnail>
     <h2>{{organization.name}}</h2>
     <p>{{organization.address}}</p>
-    <button ion-button clear item-right>View</button>
+    <button ion-button clear item-right (click)="openOrgDesc(organization)">View</button>
   </ion-item>
 </ion-list>
 
 
   <ion-fab bottom left edge style="padding-bottom: 2em">
-    <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+    <button ion-fab mini><ion-icon name="add" (click)="createOrganization()"></ion-icon></button>
   </ion-fab>
   <ion-fab bottom right edge style="padding-bottom: 2em">
     <button ion-fab mini><ion-icon name="search"></ion-icon></button>
   </ion-fab>
-
-
-
-  <!--
-  <ion-list>
-    <ion-item-sliding *ngFor="let item of currentItems">
-      <button ion-item (click)="openItem(item)">
-        <ion-avatar item-start>
-          <img [src]="item.profilePic" />
-        </ion-avatar>
-        <h2>{{item.name}}</h2>
-        <p>{{item.about}}</p>
-        <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
-      </button>
-
-      <ion-item-options>
-        <button ion-button color="danger" (click)="deleteItem(item)">
-          {{ 'DELETE_BUTTON' | translate }}
-        </button>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
-
--->
-
-
 
 </ion-content>

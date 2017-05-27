@@ -3,6 +3,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { NavController, ViewController } from 'ionic-angular';
 
 import { Camera } from '@ionic-native/camera';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 
 @Component({
@@ -17,8 +18,10 @@ export class ItemCreatePage {
   item: any;
 
   form: FormGroup;
+  organizations: FirebaseListObservable<any[]>;
 
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera) {
+  constructor(public navCtrl: NavController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera, db: AngularFireDatabase) {
+    this.organizations = db.list("/Organizations");
     this.form = formBuilder.group({
       profilePic: [''],
       name: ['', Validators.required],
@@ -79,6 +82,8 @@ export class ItemCreatePage {
    */
   done() {
     if (!this.form.valid) { return; }
-    this.viewCtrl.dismiss(this.form.value);
+    var organization = { name: this.form.value.name, address: this.form.value.about };
+    this.organizations.push(organization);
+    this.viewCtrl.dismiss();
   }
 }
