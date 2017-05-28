@@ -9,6 +9,8 @@ import { Items } from '../../providers/providers';
 
 import { Item } from '../../models/item';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { UserService } from '../../services/user-service/user-service';
+import { OrganizationService } from '../../services/organization-service/organization-service';
 
 @Component({
   selector: 'page-list-master',
@@ -16,11 +18,11 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 })
 export class ListMasterPage {
   currentItems: Item[];
-  organizations: FirebaseListObservable<any[]>;
+  organizations: any;
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController, db: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController, db: AngularFireDatabase, userService: UserService, organizationService: OrganizationService) {
     this.currentItems = this.items.query();
-    this.organizations = db.list("/Organizations");
+    this.organizations = organizationService.getOrganizations();
   }
 
   /**

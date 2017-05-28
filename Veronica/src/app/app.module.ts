@@ -39,7 +39,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 
-import { UserService } from "../services/user-service/user-service"
+import { UserService } from "../services/user-service/user-service";
+import { OrganizationService } from "../services/organization-service/organization-service";
 
 export const firebaseConfig = {
     apiKey: "AIzaSyB1BwH5mbiTRWDX_XeohwkL9o3lfiff6mE",
@@ -108,6 +109,7 @@ export function entryComponents() {
 export function providers() {
   return [
     UserService,
+    OrganizationService,
     Api,
     Items,
     User,
