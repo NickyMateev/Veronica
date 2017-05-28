@@ -25,6 +25,7 @@ export class ListMasterPage {
   constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController, db: AngularFireDatabase, userService: UserService, organizationService: OrganizationService, public vibration: Vibration) {
     this.currentItems = this.items.query();
     this.organizations = organizationService.getOrganizations();
+    //this.organizations = db.list("/Organizations");
   }
 
   /**

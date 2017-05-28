@@ -61,12 +61,14 @@ export class LoginPage {
     });
 
     if(!areCredentialsCorrect) {
+      /*
       let toast = this.toastCtrl.create({
         message: "Invalid credentials! Try again.",
         duration: 3000,
         position: 'top'
       });
       toast.present();
+      */
     }
     /*
     this.user.login(this.account).subscribe((resp) => {
