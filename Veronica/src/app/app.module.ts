@@ -32,6 +32,7 @@ import { Camera } from '@ionic-native/camera';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import {Push, PushObject, PushOptions} from "@ionic-native/push";
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -41,6 +42,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { UserService } from "../services/user-service/user-service";
 import { OrganizationService } from "../services/organization-service/organization-service";
+
 
 export const firebaseConfig = {
     apiKey: "AIzaSyB1BwH5mbiTRWDX_XeohwkL9o3lfiff6mE",
@@ -117,6 +119,9 @@ export function providers() {
     GoogleMaps,
     SplashScreen,
     StatusBar,
+      Push,
+      PushObject,
+      PushOptions,
 
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development

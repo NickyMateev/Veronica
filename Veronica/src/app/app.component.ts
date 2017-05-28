@@ -22,6 +22,9 @@ import { Settings } from '../providers/providers';
 
 import { TranslateService } from '@ngx-translate/core'
 
+import { AlertController } from "ionic-angular";
+import {Push, PushObject, PushOptions} from "@ionic-native/push";
+
 @Component({
   template: `<ion-menu [content]="content">
     <ion-header>
@@ -61,7 +64,7 @@ export class MyApp {
     { title: 'Search', component: SearchPage }
   ]
 
-  constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, statusBar: StatusBar, splashScreen: SplashScreen) {
+  constructor(private translate: TranslateService, public platform: Platform, private settings: Settings, private config: Config, public statusBar: StatusBar, public splashScreen: SplashScreen, public push: Push, public alertCtrl: AlertController) {
 
     this.initTranslate();
 
@@ -70,8 +73,69 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+      this.initPushNotification();
     });
   }
+
+  initPushNotification() {
+    if (!this.platform.is('cordova')) {
+      console.warn("Push notifications not initialized. Cordova is not available - Run in physical device");
+      return;
+    }
+    const options = {
+      android: {
+        senderID: "358748682968"
+      },
+      ios: {
+        alert: "true",
+        badge: false,
+        sound: "true"
+      },
+      windows: {}
+    };
+    const pushObject = this.push.init(options);
+
+    pushObject.on('registration').subscribe((data: any) => {
+      console.log("device token ->", data.registrationId);
+      //TODO - send device token to server
+    });
+
+    pushObject.on('notification').subscribe((data: any) => {
+      console.log('message', data.message);
+      //if user using app and push notification comes
+      if (data.additionalData.foreground) {
+        // if application open, show popup
+        let confirmAlert = this.alertCtrl.create({
+          title: 'New Notification',
+          message: data.message,
+          buttons: [{
+            text: 'Ignore',
+            role: 'cancel'
+          }, {
+            text: 'View',
+            handler: () => {
+              //TODO: Your logic here
+              this.nav.push(ListMasterPage, {message: data.message});
+            }
+          }]
+        });
+        confirmAlert.present();
+      } else {
+        //if user NOT using app and push notification comes
+        //TODO: Your logic on click of push notification directly
+        this.nav.push(ListMasterPage, {message: data.message});
+        console.log("Push notification clicked");
+      }
+    });
+
+    pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+  }
+
+
+
+
+
+
 
   initTranslate() {
     // Set the default language for translation strings, and the current language.
