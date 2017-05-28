@@ -20,18 +20,21 @@ export class ListMasterEventsPage {
   events: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public userService: UserService, public organizationService: OrganizationService, public eventService: EventService) {
+    this.events = [];
     this.user = userService.getUser();
     this.organizationIds = organizationService.getOrganizationIds();
-    this.organizationIds.forEach(function (organizationId) {
-        var result = this.eventService.getOrganizationEvents(organizationId);
-        result.forEach(function(result) {
-          this.events.push(result);
-        });
-    });
+    this.events = this.getEvents();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ListMasterEventsPage');
+  private getEvents() {
+    var resultEvents = [];
+    for (var i = 0; i < this.organizationIds.length; i++) {
+      var result = this.eventService.getOrganizationEvents(this.organizationIds[i]);
+      for (var j = 0; j < result.length; j++) {
+        resultEvents.push(result[j]);
+      }
+    }
+    return resultEvents;
   }
 
 }

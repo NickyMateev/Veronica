@@ -12,6 +12,8 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import { UserService } from '../../services/user-service/user-service';
 import { OrganizationService } from '../../services/organization-service/organization-service';
 
+import { Vibration } from '@ionic-native/vibration';
+
 @Component({
   selector: 'page-list-master',
   templateUrl: 'list-master.html'
@@ -20,7 +22,7 @@ export class ListMasterPage {
   currentItems: Item[];
   organizations: any;
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController, db: AngularFireDatabase, userService: UserService, organizationService: OrganizationService) {
+  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController, db: AngularFireDatabase, userService: UserService, organizationService: OrganizationService, public vibration: Vibration) {
     this.currentItems = this.items.query();
     this.organizations = organizationService.getOrganizations();
   }
@@ -56,6 +58,7 @@ export class ListMasterPage {
    * Navigate to the detail page for this item.
    */
   openOrgDesc(organization) {
+    this.vibration.vibrate(5000);
     this.navCtrl.push(ItemDetailPage, {
       organization: organization
     });

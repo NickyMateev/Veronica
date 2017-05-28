@@ -16,7 +16,6 @@ export class OrganizationService {
 
     getOrganizationIds() {
         var userId = this.currUser.$key;
-        console.log(userId);
         var orgIds = [];
         this.userOrganization.subscribe(userOrganization => {
             for(var i = 0; i < userOrganization.length; i++) {

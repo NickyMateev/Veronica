@@ -17,15 +17,14 @@ export class EventService {
     }
 
     getOrganizationEvents(organizationId) {
-       var events = [];
+       var resultEvents = [];
        this.events.subscribe(events => {
            for(var i = 0; i < events.length; i++) {
                if(events[i].idOrganization === organizationId) {
-                   events.push(events[i]);
+                   resultEvents.push(events[i]);
                }
            }
        });
-
-       return events;
+        return resultEvents;
     }
 }
