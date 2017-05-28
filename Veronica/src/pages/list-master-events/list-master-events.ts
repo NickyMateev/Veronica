@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { UserService } from '../../services/user-service/user-service';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { OrganizationService } from '../../services/organization-service/organization-service';
 import { EventService } from '../../services/event-service/event-service';
+import { ChannelPage } from "../channel/channel";
 
 /**
  * Generated class for the ListMasterEventsPage page.
@@ -15,26 +17,36 @@ import { EventService } from '../../services/event-service/event-service';
   templateUrl: 'list-master-events.html',
 })
 export class ListMasterEventsPage {
-  user: any;
   organizationIds: any;
-  events: any;
+  events: FirebaseListObservable<any[]>;
+  eventsArr: any[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public userService: UserService, public organizationService: OrganizationService, public eventService: EventService) {
-    this.events = [];
-    this.user = userService.getUser();
-    this.organizationIds = organizationService.getOrganizationIds();
-    this.events = this.getEvents();
+  constructor(public navCtrl: NavController, public navParams: NavParams, public organizationService: OrganizationService, public eventService: EventService, public db: AngularFireDatabase) {
+      this.eventsArr = [];
+      this.organizationIds = organizationService.getOrganizationIds();
+      this.events = db.list("/Events");
+      this.events.subscribe(events => {
+            for(var i = 0; i < events.length; i++) {
+                if(this.isEventRelevant(events[i])) {
+                   this.eventsArr.push(events[i]);
+                }
+            }
+      });
   }
 
-  private getEvents() {
-    var resultEvents = [];
-    for (var i = 0; i < this.organizationIds.length; i++) {
-      var result = this.eventService.getOrganizationEvents(this.organizationIds[i]);
-      for (var j = 0; j < result.length; j++) {
-        resultEvents.push(result[j]);
-      }
-    }
-    return resultEvents;
+  isEventRelevant(event) {
+     for(var i = 0; i < this.organizationIds.length; i++) {
+         if(this.organizationIds[i] == event.idOrganization) {
+             return true;
+         }
+     }
+     return false;
   }
 
+  goToChannel(event) {
+      //this.navParams.data = event;
+      this.navCtrl.push(ChannelPage, {
+          event: event
+      });
+  }
 }

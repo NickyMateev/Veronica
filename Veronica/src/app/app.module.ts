@@ -22,6 +22,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { TutorialPage } from '../pages/tutorial/tutorial';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { ProfilePage } from '../pages/profile/profile';
+import { ChannelPage } from '../pages/channel/channel';
 
 
 import { Api } from '../providers/api';
@@ -100,7 +101,8 @@ let pages = [
   TabsPage,
   TutorialPage,
   WelcomePage,
-  ProfilePage
+  ProfilePage,
+  ChannelPage
 ];
 
 export function declarations() {

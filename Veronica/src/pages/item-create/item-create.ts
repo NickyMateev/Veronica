@@ -5,6 +5,10 @@ import { NavController, ViewController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
+import { ListMasterPage } from '../list-master/list-master';
+
+import { UserService } from '../../services/user-service/user-service';
+
 
 @Component({
   selector: 'page-item-create',
@@ -14,13 +18,15 @@ export class ItemCreatePage {
   @ViewChild('fileInput') fileInput;
 
   isReadyToSave: boolean;
+  user: any;
 
   item: any;
 
   form: FormGroup;
   organizations: FirebaseListObservable<any[]>;
 
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera, db: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera, public db: AngularFireDatabase, public userService: UserService) {
+    this.user = userService.getUser();
     this.organizations = db.list("/Organizations");
     this.form = formBuilder.group({
       profilePic: [''],
@@ -82,8 +88,12 @@ export class ItemCreatePage {
    */
   done() {
     if (!this.form.valid) { return; }
-    var organization = { name: this.form.value.name, address: this.form.value.about };
+    var organization = { name: this.form.value.name, address: this.form.value.about, idUserAdmin: this.user.$key };
     this.organizations.push(organization);
-    this.viewCtrl.dismiss();
+    var latestOrgId = null;
+    this.organizations.subscribe(orgs => latestOrgId = orgs[orgs.length - 1].$key);
+
+    this.db.list("/UserOrganizations").push({idOrganization: latestOrgId, idUser: this.user.$key});
+    this.navCtrl.push(ListMasterPage);
   }
 }

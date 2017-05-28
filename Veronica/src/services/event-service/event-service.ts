@@ -4,27 +4,34 @@ import { UserService } from '../user-service/user-service';
 
 @Injectable()
 export class EventService {
-    private userOrganization: FirebaseListObservable<any[]>;
-    private organizations: FirebaseListObservable<any[]>;
-    private events: FirebaseListObservable<any[]>;
-    private currUser;
+    events: FirebaseListObservable<any[]>;
+    eventsArray: any;
 
     constructor(db: AngularFireDatabase, userService: UserService) {
-        this.userOrganization = db.list("/UserOrganization");
-        this.organizations = db.list("/Organizations");
         this.events = db.list("/Events");
-        this.currUser = userService.getUser();
+        this.events.subscribe(events => this.eventsArray = events);
     }
 
-    getOrganizationEvents(organizationId) {
-       var resultEvents = [];
-       this.events.subscribe(events => {
-           for(var i = 0; i < events.length; i++) {
-               if(events[i].idOrganization === organizationId) {
-                   resultEvents.push(events[i]);
-               }
-           }
-       });
-        return resultEvents;
+    getEvents() {
+        return this.eventsArray;
+    }
+
+    getOrganizationEvents(orgId) {
+        var result = [];
+        for(var i = 0; i < this.eventsArray.length; i++) {
+            if(this.eventsArray[i].idOrganization == orgId) {
+                result.push(this.eventsArray[i]);
+            }
+        }
+        return result;
+    }
+
+    getOrganizationsEvents(organizationIds) {
+        var result = [];
+        for(var i = 0; i < organizationIds.length; i++) {
+           result.push(this.getOrganizationEvents(organizationIds[i]));
+           console.log("iteration #" + i + ": " + result);
+        }
+        return result;
     }
 }
