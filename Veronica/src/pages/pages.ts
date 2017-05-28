@@ -1,4 +1,5 @@
 import { ListMasterPage } from './list-master/list-master';
+import { ListMasterEventsPage } from './list-master-events/list-master-events';
 import { SearchPage } from './search/search';
 import { SettingsPage } from './settings/settings';
 import { TabsPage } from './tabs/tabs';
@@ -14,5 +15,5 @@ export const MainPage = TabsPage;
 
 // The initial root pages for our tabs (remove if not using tabs)
 export const Tab1Root = ListMasterPage;
-export const Tab2Root = SearchPage;
+export const Tab2Root = ListMasterEventsPage;
 export const Tab3Root = ProfilePage;

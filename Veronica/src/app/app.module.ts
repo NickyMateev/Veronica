@@ -11,6 +11,7 @@ import { ContentPage } from '../pages/content/content';
 import { ItemCreatePage } from '../pages/item-create/item-create';
 import { ItemDetailPage } from '../pages/item-detail/item-detail';
 import { ListMasterPage } from '../pages/list-master/list-master';
+import { ListMasterEventsPage } from '../pages/list-master-events/list-master-events';
 import { LoginPage } from '../pages/login/login';
 import { MapPage } from '../pages/map/map';
 import { MenuPage } from '../pages/menu/menu';
@@ -41,6 +42,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 import { UserService } from "../services/user-service/user-service";
 import { OrganizationService } from "../services/organization-service/organization-service";
+import { EventService } from "../services/event-service/event-service";
 
 
 export const firebaseConfig = {
@@ -87,6 +89,7 @@ let pages = [
   ItemCreatePage,
   ItemDetailPage,
   ListMasterPage,
+  ListMasterEventsPage,
   LoginPage,
   MapPage,
   MenuPage,
@@ -111,6 +114,7 @@ export function providers() {
   return [
     UserService,
     OrganizationService,
+    EventService,
     Api,
     Items,
     User,
