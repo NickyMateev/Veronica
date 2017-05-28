@@ -7,6 +7,7 @@ import { User } from '../../providers/user';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { UserService } from '../../services/user-service/user-service';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class SignupPage {
     public user: User,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
-    db: AngularFireDatabase) {
+    db: AngularFireDatabase,
+    public userService: UserService) {
     this.users = db.list("/Users");
     /* DISABLING ERROR MESSAGING
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
@@ -55,6 +57,7 @@ export class SignupPage {
 
       if(!userAlreadyExists) {
         this.users.push({email: email, password: pass});
+        this.userService.setCurrentUserToLatest();
 
         let toast = this.toastCtrl.create({
           message: "Successfully created user!",
