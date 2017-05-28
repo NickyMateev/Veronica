@@ -22,6 +22,7 @@ import { TutorialPage } from '../pages/tutorial/tutorial';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { ProfilePage } from '../pages/profile/profile';
 
+
 import { Api } from '../providers/api';
 import { Items } from '../mocks/providers/items';
 import { Settings } from '../providers/settings';
@@ -38,6 +39,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 
+import { UserService } from "../services/user-service/user-service"
 
 export const firebaseConfig = {
     apiKey: "AIzaSyB1BwH5mbiTRWDX_XeohwkL9o3lfiff6mE",
@@ -47,6 +49,7 @@ export const firebaseConfig = {
     storageBucket: "veronica-9ca3b.appspot.com",
     messagingSenderId: "432362629415"
 };
+
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -104,6 +107,7 @@ export function entryComponents() {
 
 export function providers() {
   return [
+    UserService,
     Api,
     Items,
     User,

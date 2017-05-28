@@ -8,6 +8,7 @@ import { User } from '../../providers/user';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { UserService } from '../../services/user-service/user-service';
 
 
 @Component({
@@ -31,7 +32,8 @@ export class LoginPage {
     public user: User,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
-    db: AngularFireDatabase) {
+    db: AngularFireDatabase,
+    private userService: UserService) {
 
     this.users = db.list("/Users");
 
@@ -52,6 +54,7 @@ export class LoginPage {
       for(var i = 0; i < users.length; i++) {
           if(users[i].email === email && users[i].password === pass) {
             areCredentialsCorrect = true;
+            this.userService.setUser(users[i]);
             this.navCtrl.push(MainPage);
           }
       }
